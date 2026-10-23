@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceHub - Pencatatan Keuangan Pribadi</title>
+    <title>FinanceHub - Personal Finance Manager</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,7 +39,7 @@
 </head>
 <body class="bg-darkbg text-gray-100 min-h-screen flex flex-col antialiased">
 
-    <!-- MODAL LOGIN / MASUK LOG (Tampil Pertama Kali) -->
+    <!-- MODAL LOGIN / MASUK LOG -->
     <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md px-4">
         <div class="bg-cardbg border border-cardborder rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl relative">
             <div class="text-center mb-6">
@@ -47,10 +47,10 @@
                     <i class="fa-solid fa-wallet text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-white">Selamat Datang</h2>
-                <p class="text-xs sm:text-sm text-gray-400 mt-1">Masukkan data diri untuk memulai sesi pencatatan keuangan Anda.</p>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1">Masukkan email & nama untuk mengakses akun keuangan Anda secara real-time dari perangkat apa saja.</p>
             </div>
 
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+            <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Nama Lengkap</label>
                     <div class="relative">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
 
-                <button type="submit"
+                <button type="submit" id="btnLoginSubmit"
                     class="w-full mt-2 bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3 px-4 rounded-xl hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-accentcyan/20 flex items-center justify-center gap-2">
                     <span>Masuk ke Aplikasi</span> <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -94,7 +94,9 @@
                     </div>
                     <div>
                         <h1 class="font-extrabold text-lg leading-tight tracking-wide text-white">FinanceHub</h1>
-                        <span class="text-[10px] uppercase font-bold text-accentcyan tracking-widest">Personal Manager</span>
+                        <span class="text-[10px] uppercase font-bold text-accentcyan tracking-widest flex items-center gap-1">
+                            <i class="fa-solid fa-cloud text-[9px]"></i> Cloud Sync
+                        </span>
                     </div>
                 </div>
 
@@ -264,18 +266,11 @@
                         <h2 class="text-xl font-bold text-white">Riwayat Transaksi</h2>
                         <p class="text-xs text-gray-400">Kelola dan atur data pemasukan serta pengeluaran Anda.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="exportDataJSON()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-download text-accentcyan"></i> Backup Data
-                        </button>
-                        <label class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-upload text-accentblue"></i> Restore Data
-                            <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
-                        </label>
-                        <button onclick="exportToCSV()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportToCSV()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-2">
                             <i class="fa-solid fa-file-csv text-emerald-400 text-sm"></i> Export CSV
                         </button>
-                        <button onclick="openModal('transaction')" class="bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1.5">
+                        <button onclick="openModal('transaction')" class="bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-2">
                             <i class="fa-solid fa-plus"></i> Tambah Baru
                         </button>
                     </div>
@@ -344,9 +339,6 @@
                         <h2 class="text-xl font-bold text-white">Log Aktivitas Pengguna</h2>
                         <p class="text-xs text-gray-400">Catatan riwayat masuk/login dan setiap perubahan data yang dilakukan di web.</p>
                     </div>
-                    <button onclick="clearActivityLog()" class="text-xs text-red-400 hover:text-red-300 border border-red-500/20 px-3 py-1.5 rounded-xl transition">
-                        Bersihkan Log
-                    </button>
                 </div>
 
                 <div class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-lg">
@@ -369,7 +361,7 @@
                 </button>
             </div>
 
-            <form id="transactionForm" onsubmit="saveTransaction(event)" class="space-y-4">
+            <form id="transactionForm" class="space-y-4">
                 <input type="hidden" id="editTxId">
 
                 <!-- TYPE SWITCH -->
@@ -436,12 +428,32 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // GLOBAL STATE & STORAGE
-        let currentUser = null;
-        let transactions = [];
-        let activityLogs = [];
+    <!-- FIREBASE SDKs & LOGIC MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // CONFIGURATION TERPASANG DARI FIREBASE ANDA
+        const firebaseConfig = {
+          apiKey: "AIzaSyBLYvOdvslb44Lixe1GLhPaXy34qvzdRgg",
+          authDomain: "finance-manager-d56d8.firebaseapp.com",
+          projectId: "finance-manager-d56d8",
+          storageBucket: "finance-manager-d56d8.firebasestorage.app",
+          messagingSenderId: "985194513951",
+          appId: "1:985194513951:web:fc0c58ab4286375b15f72a",
+          measurementId: "G-PKN0T3TZBQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // GLOBAL STATE
+        window.currentUser = null;
+        window.transactions = [];
+        window.activityLogs = [];
+        let unsubscribeTx = null;
+        let unsubscribeLogs = null;
 
         // CHARTS INSTANCES
         let cashflowChartInstance = null;
@@ -463,166 +475,111 @@
             EXPENSE: ['Makanan & Minuman', 'Belanja', 'Transportasi', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Pendidikan', 'Lain-Lain']
         };
 
-        // INITIALIZATION
+        // DOM LOADED
         window.addEventListener('DOMContentLoaded', () => {
-            loadLocalStorage();
-            checkUserSession();
-            document.getElementById('txDate').valueAsDate = new Date();
-        });
-
-        function loadLocalStorage() {
-            const savedUser = localStorage.getItem('fh_user');
-            const savedTx = localStorage.getItem('fh_transactions');
-            const savedLogs = localStorage.getItem('fh_logs');
-
-            if (savedUser) currentUser = JSON.parse(savedUser);
-            if (savedTx) transactions = JSON.parse(savedTx);
-            if (savedLogs) activityLogs = JSON.parse(savedLogs);
-        }
-
-        function checkUserSession() {
-            if (currentUser) {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('appContainer').classList.remove('hidden');
-                updateUserUI();
-                renderAll();
+            const savedUser = localStorage.getItem('fh_cloud_user');
+            if (savedUser) {
+                window.currentUser = JSON.parse(savedUser);
+                initCloudSession();
             } else {
                 document.getElementById('loginModal').classList.remove('hidden');
                 document.getElementById('appContainer').classList.add('hidden');
             }
-        }
 
-        // LOGIN / LOGOUT HANDLERS
-        function handleLogin(e) {
+            document.getElementById('txDate').valueAsDate = new Date();
+        });
+
+        // LOGIN SUBMIT
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('inputName').value.trim();
-            const email = document.getElementById('inputEmail').value.trim();
+            const email = document.getElementById('inputEmail').value.trim().toLowerCase();
 
             if (!name || !email) return;
 
-            currentUser = { name, email, lastLogin: new Date().toISOString() };
-            localStorage.setItem('fh_user', JSON.stringify(currentUser));
+            window.currentUser = { name, email, uid: email.replace(/[^a-zA-Z0-9]/g, '_') };
+            localStorage.setItem('fh_cloud_user', JSON.stringify(window.currentUser));
 
-            // Log activity
-            addActivityLog('LOGIN', `Pengguna masuk/login dengan nama: ${name}`);
+            await initCloudSession();
+            await addActivityLog('LOGIN', `Pengguna masuk/login di perangkat ini.`);
+        });
 
-            checkUserSession();
+        async function initCloudSession() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            updateUserUI();
+
+            // Setup Realtime Listeners for Firestore
+            setupFirestoreListeners();
         }
 
-        function handleLogout() {
+        function setupFirestoreListeners() {
+            if (!window.currentUser) return;
+            const uid = window.currentUser.uid;
+
+            // Listen to Transactions Collection Realtime
+            if (unsubscribeTx) unsubscribeTx();
+            const txQuery = query(collection(db, "users", uid, "transactions"));
+            unsubscribeTx = onSnapshot(txQuery, (snapshot) => {
+                window.transactions = [];
+                snapshot.forEach((doc) => {
+                    window.transactions.push({ id: doc.id, ...doc.data() });
+                });
+                renderAll();
+            });
+
+            // Listen to Logs Collection Realtime
+            if (unsubscribeLogs) unsubscribeLogs();
+            const logQuery = query(collection(db, "users", uid, "logs"));
+            unsubscribeLogs = onSnapshot(logQuery, (snapshot) => {
+                window.activityLogs = [];
+                snapshot.forEach((doc) => {
+                    window.activityLogs.push({ id: doc.id, ...doc.data() });
+                });
+                window.activityLogs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                renderActivityLogs();
+            });
+        }
+
+        window.handleLogout = async () => {
             if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
-                addActivityLog('LOGOUT', `Pengguna ${currentUser.name} keluar dari akun.`);
-                localStorage.removeItem('fh_user');
-                currentUser = null;
-                checkUserSession();
+                if (unsubscribeTx) unsubscribeTx();
+                if (unsubscribeLogs) unsubscribeLogs();
+                localStorage.removeItem('fh_cloud_user');
+                window.currentUser = null;
+                document.getElementById('loginModal').classList.remove('hidden');
+                document.getElementById('appContainer').classList.add('hidden');
             }
-        }
+        };
 
         function updateUserUI() {
-            if (!currentUser) return;
-            document.getElementById('userNameDisplay').innerText = currentUser.name;
-            document.getElementById('userEmailDisplay').innerText = currentUser.email;
+            if (!window.currentUser) return;
+            document.getElementById('userNameDisplay').innerText = window.currentUser.name;
+            document.getElementById('userEmailDisplay').innerText = window.currentUser.email;
 
-            const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+            const initials = window.currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
             document.getElementById('userAvatar').innerText = initials || 'U';
         }
 
         // LOGGING SYSTEM
-        function addActivityLog(type, details) {
-            const logItem = {
-                id: 'log_' + Date.now(),
+        async function addActivityLog(type, details) {
+            if (!window.currentUser) return;
+            const logData = {
                 timestamp: new Date().toISOString(),
-                user: currentUser ? currentUser.name : 'System',
+                user: window.currentUser.name,
                 type: type,
                 details: details
             };
-            activityLogs.unshift(logItem);
-            localStorage.setItem('fh_logs', JSON.stringify(activityLogs));
-            renderActivityLogs();
+            try {
+                await addDoc(collection(db, "users", window.currentUser.uid, "logs"), logData);
+            } catch(e) { console.error("Log error:", e); }
         }
 
-        function clearActivityLog() {
-            if (confirm('Bersihkan semua catatan aktivitas?')) {
-                activityLogs = [];
-                localStorage.setItem('fh_logs', JSON.stringify(activityLogs));
-                renderActivityLogs();
-            }
-        }
-
-        // NAVIGATION TAB SWITCH
-        function switchTab(tabName) {
-            const tabs = ['dashboard', 'transactions', 'activity'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                const navBtn = document.getElementById(`nav-${t}`);
-                if (t === tabName) {
-                    el.classList.remove('hidden');
-                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20";
-                } else {
-                    el.classList.add('hidden');
-                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-gray-400 hover:text-white hover:bg-cardborder/40";
-                }
-            });
-            if (tabName === 'dashboard') {
-                renderCharts();
-            }
-        }
-
-        // MODAL HANDLERS
-        function openModal(type, editId = null) {
-            if (type === 'transaction') {
-                const form = document.getElementById('transactionForm');
-                form.reset();
-                document.getElementById('txDate').valueAsDate = new Date();
-
-                if (editId) {
-                    const tx = transactions.find(t => t.id === editId);
-                    if (tx) {
-                        document.getElementById('modalTitle').innerText = 'Edit Transaksi';
-                        document.getElementById('editTxId').value = tx.id;
-                        setTxType(tx.type);
-                        document.getElementById('txAmount').value = tx.amount;
-                        document.getElementById('txDesc').value = tx.description;
-                        document.getElementById('txAccount').value = tx.account;
-                        document.getElementById('txCategory').value = tx.category;
-                        document.getElementById('txDate').value = tx.date;
-                    }
-                } else {
-                    document.getElementById('modalTitle').innerText = 'Tambah Transaksi Baru';
-                    document.getElementById('editTxId').value = '';
-                    setTxType('INCOME');
-                }
-
-                document.getElementById('transactionModal').classList.remove('hidden');
-            }
-        }
-
-        function closeModal(type) {
-            if (type === 'transaction') {
-                document.getElementById('transactionModal').classList.add('hidden');
-            }
-        }
-
-        function setTxType(type) {
-            document.getElementById('txType').value = type;
-            const btnIncome = document.getElementById('btnTypeIncome');
-            const btnExpense = document.getElementById('btnTypeExpense');
-            const selectCategory = document.getElementById('txCategory');
-
-            if (type === 'INCOME') {
-                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10";
-                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
-            } else {
-                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-rose-400 bg-rose-500/10";
-                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
-            }
-
-            selectCategory.innerHTML = categories[type].map(c => `<option value="${c}">${c}</option>`).join('');
-        }
-
-        // SAVE / EDIT TRANSACTIONS
-        function saveTransaction(e) {
+        // SAVE TRANSACTION
+        document.getElementById('transactionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!window.currentUser) return;
+
             const id = document.getElementById('editTxId').value;
             const type = document.getElementById('txType').value;
             const amount = parseFloat(document.getElementById('txAmount').value) || 0;
@@ -631,50 +588,43 @@
             const category = document.getElementById('txCategory').value;
             const date = document.getElementById('txDate').value;
 
-            if (id) {
-                const index = transactions.findIndex(t => t.id === id);
-                if (index !== -1) {
-                    transactions[index] = { id, type, amount, description, account, category, date };
+            const txData = { type, amount, description, account, category, date, updatedAt: new Date().toISOString() };
+
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "users", window.currentUser.uid, "transactions", id), txData);
                     addActivityLog('EDIT', `Mengubah transaksi "${description}" (Rp ${formatNumber(amount)})`);
+                } else {
+                    await addDoc(collection(db, "users", window.currentUser.uid, "transactions"), txData);
+                    addActivityLog('ADD', `Menambahkan ${type === 'INCOME' ? 'Pemasukan' : 'Pengeluaran'} "${description}" sebesar Rp ${formatNumber(amount)}`);
                 }
-            } else {
-                const newTx = {
-                    id: 'tx_' + Date.now(),
-                    type,
-                    amount,
-                    description,
-                    account,
-                    category,
-                    date
-                };
-                transactions.unshift(newTx);
-                addActivityLog('ADD', `Menambahkan ${type === 'INCOME' ? 'Pemasukan' : 'Pengeluaran'} "${description}" sebesar Rp ${formatNumber(amount)}`);
+            } catch(err) {
+                alert("Gagal menyimpan ke cloud: " + err.message);
             }
 
-            localStorage.setItem('fh_transactions', JSON.stringify(transactions));
             closeModal('transaction');
-            renderAll();
-        }
+        });
 
         // DELETE TRANSACTION
-        function deleteTransaction(id) {
-            const tx = transactions.find(t => t.id === id);
+        window.deleteTransaction = async (id) => {
+            const tx = window.transactions.find(t => t.id === id);
             if (!tx) return;
 
             if (confirm(`Apakah Anda yakin ingin menghapus transaksi "${tx.description}"?`)) {
-                transactions = transactions.filter(t => t.id !== id);
-                localStorage.setItem('fh_transactions', JSON.stringify(transactions));
-                addActivityLog('DELETE', `Menghapus transaksi "${tx.description}" (Rp ${formatNumber(tx.amount)})`);
-                renderAll();
+                try {
+                    await deleteDoc(doc(db, "users", window.currentUser.uid, "transactions", id));
+                    addActivityLog('DELETE', `Menghapus transaksi "${tx.description}" (Rp ${formatNumber(tx.amount)})`);
+                } catch(err) {
+                    alert("Gagal menghapus: " + err.message);
+                }
             }
-        }
+        };
 
-        // RENDER LOGIC
+        // RENDER FUNCTIONS
         function renderAll() {
             calculateBalances();
             renderRecentTransactions();
             renderTransactions();
-            renderActivityLogs();
             renderCharts();
         }
 
@@ -685,7 +635,7 @@
             const now = new Date();
             const currentMonthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-            transactions.forEach(t => {
+            window.transactions.forEach(t => {
                 const val = t.type === 'INCOME' ? t.amount : -t.amount;
                 total += val;
 
@@ -710,10 +660,10 @@
 
         function renderRecentTransactions() {
             const container = document.getElementById('recentTransactionsList');
-            const recent = transactions.slice(0, 5);
+            const recent = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
             if (recent.length === 0) {
-                container.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500 text-xs">Belum ada transaksi dicatat. Klik "+ Tambah Transaksi" untuk memulai.</td></tr>`;
+                container.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500 text-xs">Belum ada transaksi. Klik "+ Tambah Transaksi" untuk memulai.</td></tr>`;
                 return;
             }
 
@@ -741,14 +691,14 @@
             }).join('');
         }
 
-        function renderTransactions() {
+        window.renderTransactions = () => {
             const container = document.getElementById('fullTransactionsList');
             const search = document.getElementById('filterSearch').value.toLowerCase();
             const typeFilter = document.getElementById('filterType').value;
             const accountFilter = document.getElementById('filterAccount').value;
             const sortFilter = document.getElementById('filterSort').value;
 
-            let filtered = transactions.filter(t => {
+            let filtered = window.transactions.filter(t => {
                 const matchSearch = t.description.toLowerCase().includes(search) || t.category.toLowerCase().includes(search);
                 const matchType = typeFilter === 'ALL' || t.type === typeFilter;
                 const matchAccount = accountFilter === 'ALL' || t.account === accountFilter;
@@ -793,16 +743,16 @@
                     </tr>
                 `;
             }).join('');
-        }
+        };
 
         function renderActivityLogs() {
             const container = document.getElementById('activityLogList');
-            if (activityLogs.length === 0) {
+            if (window.activityLogs.length === 0) {
                 container.innerHTML = `<p class="text-xs text-gray-500 pl-2">Belum ada riwayat aktivitas.</p>`;
                 return;
             }
 
-            container.innerHTML = activityLogs.map(log => {
+            container.innerHTML = window.activityLogs.map(log => {
                 let badgeColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
                 if (log.type === 'ADD') badgeColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
                 if (log.type === 'DELETE') badgeColor = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
@@ -844,7 +794,7 @@
                 months.push(monthLabel);
 
                 let incSum = 0, expSum = 0;
-                transactions.forEach(t => {
+                window.transactions.forEach(t => {
                     if (t.date && t.date.startsWith(monthKey)) {
                         if (t.type === 'INCOME') incSum += t.amount;
                         if (t.type === 'EXPENSE') expSum += t.amount;
@@ -877,7 +827,7 @@
             });
 
             const categorySums = {};
-            transactions.filter(t => t.type === 'EXPENSE').forEach(t => {
+            window.transactions.filter(t => t.type === 'EXPENSE').forEach(t => {
                 categorySums[t.category] = (categorySums[t.category] || 0) + t.amount;
             });
 
@@ -907,52 +857,79 @@
             });
         }
 
-        // EXPORT BACKUP JSON & CSV
-        function exportDataJSON() {
-            const dataObj = { user: currentUser, transactions, activityLogs };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `FinanceHub_Backup_${currentUser ? currentUser.name.replace(/\s+/g, '_') : 'User'}_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
-
-        function importDataJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported.transactions && Array.isArray(imported.transactions)) {
-                        transactions = imported.transactions;
-                        if (imported.activityLogs) activityLogs = imported.activityLogs;
-                        localStorage.setItem('fh_transactions', JSON.stringify(transactions));
-                        localStorage.setItem('fh_logs', JSON.stringify(activityLogs));
-                        addActivityLog('IMPORT', 'Melakukan restore / import data dari file JSON.');
-                        renderAll();
-                        alert('Data berhasil dipulihkan!');
-                    } else {
-                        alert('Format file JSON tidak valid.');
-                    }
-                } catch(err) {
-                    alert('Gagal membaca file backup.');
+        // GLOBAL HELPERS EXPOSED TO WINDOW
+        window.switchTab = (tabName) => {
+            ['dashboard', 'transactions', 'activity'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabName) {
+                    el.classList.remove('hidden');
+                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20";
+                } else {
+                    el.classList.add('hidden');
+                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-gray-400 hover:text-white hover:bg-cardborder/40";
                 }
-            };
-            reader.readAsText(file);
-        }
+            });
+            if (tabName === 'dashboard') renderCharts();
+        };
 
-        function exportToCSV() {
-            if (transactions.length === 0) {
+        window.openModal = (type, editId = null) => {
+            if (type === 'transaction') {
+                document.getElementById('transactionForm').reset();
+                document.getElementById('txDate').valueAsDate = new Date();
+
+                if (editId) {
+                    const tx = window.transactions.find(t => t.id === editId);
+                    if (tx) {
+                        document.getElementById('modalTitle').innerText = 'Edit Transaksi';
+                        document.getElementById('editTxId').value = tx.id;
+                        setTxType(tx.type);
+                        document.getElementById('txAmount').value = tx.amount;
+                        document.getElementById('txDesc').value = tx.description;
+                        document.getElementById('txAccount').value = tx.account;
+                        document.getElementById('txCategory').value = tx.category;
+                        document.getElementById('txDate').value = tx.date;
+                    }
+                } else {
+                    document.getElementById('modalTitle').innerText = 'Tambah Transaksi Baru';
+                    document.getElementById('editTxId').value = '';
+                    setTxType('INCOME');
+                }
+                document.getElementById('transactionModal').classList.remove('hidden');
+            }
+        };
+
+        window.closeModal = (type) => {
+            if (type === 'transaction') {
+                document.getElementById('transactionModal').classList.add('hidden');
+            }
+        };
+
+        window.setTxType = (type) => {
+            document.getElementById('txType').value = type;
+            const btnIncome = document.getElementById('btnTypeIncome');
+            const btnExpense = document.getElementById('btnTypeExpense');
+            const selectCategory = document.getElementById('txCategory');
+
+            if (type === 'INCOME') {
+                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10";
+                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
+            } else {
+                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-rose-400 bg-rose-500/10";
+                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
+            }
+
+            selectCategory.innerHTML = categories[type].map(c => `<option value="${c}">${c}</option>`).join('');
+        };
+
+        window.exportToCSV = () => {
+            if (window.transactions.length === 0) {
                 alert('Tidak ada data transaksi untuk di-export.');
                 return;
             }
 
             let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Tipe,Deskripsi,Kategori,Akun,Jumlah\n";
-            transactions.forEach(t => {
+            window.transactions.forEach(t => {
                 csvContent += `"${t.id}","${t.date}","${t.type}","${t.description}","${t.category}","${t.account}",${t.amount}\n`;
             });
 
@@ -963,9 +940,8 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
+        };
 
-        // HELPERS
         function formatIDR(num) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
         }
