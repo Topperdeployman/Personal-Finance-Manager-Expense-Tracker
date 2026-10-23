@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceHub - Personal Finance Manager</title>
+    <title>FinanceHub - Pencatatan Keuangan Pribadi</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -74,8 +74,8 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full mt-2 bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3 px-4 rounded-xl hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-accentcyan/20">
-                    Masuk ke Aplikasi <i class="fa-solid fa-arrow-right ml-2"></i>
+                    class="w-full mt-2 bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3 px-4 rounded-xl hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-accentcyan/20 flex items-center justify-center gap-2">
+                    <span>Masuk ke Aplikasi</span> <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
         </div>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <!-- USER PROFILE PROFILE BADGE -->
+                <!-- USER PROFILE BADGE -->
                 <div class="bg-darkbg/60 border border-cardborder rounded-xl p-3 mb-6 flex items-center gap-3">
                     <div id="userAvatar" class="w-10 h-10 rounded-full bg-accentpurple flex items-center justify-center font-bold text-white text-sm shrink-0">
                         --
@@ -264,11 +264,18 @@
                         <h2 class="text-xl font-bold text-white">Riwayat Transaksi</h2>
                         <p class="text-xs text-gray-400">Kelola dan atur data pemasukan serta pengeluaran Anda.</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="exportToCSV()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="exportDataJSON()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-download text-accentcyan"></i> Backup Data
+                        </button>
+                        <label class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-upload text-accentblue"></i> Restore Data
+                            <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
+                        </label>
+                        <button onclick="exportToCSV()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
                             <i class="fa-solid fa-file-csv text-emerald-400 text-sm"></i> Export CSV
                         </button>
-                        <button onclick="openModal('transaction')" class="bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-2">
+                        <button onclick="openModal('transaction')" class="bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Tambah Baru
                         </button>
                     </div>
@@ -406,7 +413,7 @@
                     <div>
                         <label class="block text-xs font-semibold text-gray-400 mb-1">Kategori</label>
                         <select id="txCategory" required class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
-                            <!-- Populated dynamically based on type -->
+                            <!-- Populated dynamically -->
                         </select>
                     </div>
                 </div>
@@ -440,7 +447,17 @@
         let cashflowChartInstance = null;
         let categoryChartInstance = null;
 
-        // CATEGORY OPTIONS
+        const categoryColors = {
+            'Makanan & Minuman': '#FF0054',
+            'Belanja': '#7B2CBF',
+            'Transportasi': '#FEE440',
+            'Tagihan & Utilitas': '#FFB703',
+            'Hiburan': '#F15BB5',
+            'Kesehatan': '#00BBF9',
+            'Pendidikan': '#3A86FF',
+            'Lain-Lain': '#00F5D4'
+        };
+
         const categories = {
             INCOME: ['Gaji', 'Bonus', 'Investasi', 'Penjualan', 'Hadiah', 'Lain-Lain'],
             EXPENSE: ['Makanan & Minuman', 'Belanja', 'Transportasi', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Pendidikan', 'Lain-Lain']
@@ -448,11 +465,6 @@
 
         // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
-            // Hapus data dummy lama agar selalu segar & bersih
-            if (!localStorage.getItem('fh_cleaned_v2')) {
-                localStorage.removeItem('fh_transactions');
-                localStorage.setItem('fh_cleaned_v2', 'true');
-            }
             loadLocalStorage();
             checkUserSession();
             document.getElementById('txDate').valueAsDate = new Date();
@@ -511,7 +523,6 @@
             document.getElementById('userNameDisplay').innerText = currentUser.name;
             document.getElementById('userEmailDisplay').innerText = currentUser.email;
 
-            // Generate Avatar Initials
             const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
             document.getElementById('userAvatar').innerText = initials || 'U';
         }
@@ -522,7 +533,7 @@
                 id: 'log_' + Date.now(),
                 timestamp: new Date().toISOString(),
                 user: currentUser ? currentUser.name : 'System',
-                type: type, // 'LOGIN', 'LOGOUT', 'ADD', 'EDIT', 'DELETE'
+                type: type,
                 details: details
             };
             activityLogs.unshift(logItem);
@@ -606,7 +617,6 @@
                 btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
             }
 
-            // Update category list options
             selectCategory.innerHTML = categories[type].map(c => `<option value="${c}">${c}</option>`).join('');
         }
 
@@ -622,14 +632,12 @@
             const date = document.getElementById('txDate').value;
 
             if (id) {
-                // EDIT EXISTING
                 const index = transactions.findIndex(t => t.id === id);
                 if (index !== -1) {
                     transactions[index] = { id, type, amount, description, account, category, date };
                     addActivityLog('EDIT', `Mengubah transaksi "${description}" (Rp ${formatNumber(amount)})`);
                 }
             } else {
-                // NEW TRANSACTION
                 const newTx = {
                     id: 'tx_' + Date.now(),
                     type,
@@ -671,12 +679,8 @@
         }
 
         function calculateBalances() {
-            let total = 0;
-            let mIncome = 0;
-            let mExpense = 0;
-            let cash = 0;
-            let ewallet = 0;
-            let bank = 0;
+            let total = 0, mIncome = 0, mExpense = 0;
+            let cash = 0, ewallet = 0, bank = 0;
 
             const now = new Date();
             const currentMonthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -685,13 +689,11 @@
                 const val = t.type === 'INCOME' ? t.amount : -t.amount;
                 total += val;
 
-                // Account wise balance
                 if (t.account === 'CASH') cash += val;
                 if (t.account === 'E-WALLET') ewallet += val;
                 if (t.account === 'BANK') bank += val;
 
-                // Monthly income / expense
-                if (t.date.startsWith(currentMonthYear)) {
+                if (t.date && t.date.startsWith(currentMonthYear)) {
                     if (t.type === 'INCOME') mIncome += t.amount;
                     if (t.type === 'EXPENSE') mExpense += t.amount;
                 }
@@ -753,7 +755,6 @@
                 return matchSearch && matchType && matchAccount;
             });
 
-            // Sorting
             filtered.sort((a, b) => {
                 if (sortFilter === 'DESC') return new Date(b.date) - new Date(a.date);
                 if (sortFilter === 'ASC') return new Date(a.date) - new Date(b.date);
@@ -823,15 +824,13 @@
             }).join('');
         }
 
-        // CHARTS RENDER (Chart.js)
+        // CHARTS RENDER
         function renderCharts() {
             if (document.getElementById('tab-dashboard').classList.contains('hidden')) return;
 
-            // Destroy previous chart instances
             if (cashflowChartInstance) cashflowChartInstance.destroy();
             if (categoryChartInstance) categoryChartInstance.destroy();
 
-            // Prepare Data Cashflow Last 6 Months
             const months = [];
             const incData = [];
             const expData = [];
@@ -844,10 +843,9 @@
                 
                 months.push(monthLabel);
 
-                let incSum = 0;
-                let expSum = 0;
+                let incSum = 0, expSum = 0;
                 transactions.forEach(t => {
-                    if (t.date.startsWith(monthKey)) {
+                    if (t.date && t.date.startsWith(monthKey)) {
                         if (t.type === 'INCOME') incSum += t.amount;
                         if (t.type === 'EXPENSE') expSum += t.amount;
                     }
@@ -857,33 +855,20 @@
                 expData.push(expSum);
             }
 
-            // Cashflow Chart
             const ctx1 = document.getElementById('cashflowChart').getContext('2d');
             cashflowChartInstance = new Chart(ctx1, {
                 type: 'bar',
                 data: {
                     labels: months,
                     datasets: [
-                        {
-                            label: 'Pemasukan',
-                            data: incData,
-                            backgroundColor: '#00F5D4',
-                            borderRadius: 6
-                        },
-                        {
-                            label: 'Pengeluaran',
-                            data: expData,
-                            backgroundColor: '#FF0054',
-                            borderRadius: 6
-                        }
+                        { label: 'Pemasukan', data: incData, backgroundColor: '#00F5D4', borderRadius: 6 },
+                        { label: 'Pengeluaran', data: expData, backgroundColor: '#FF0054', borderRadius: 6 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9CA3AF', font: { family: 'Inter', size: 11 } } }
-                    },
+                    plugins: { legend: { labels: { color: '#9CA3AF', font: { family: 'Inter', size: 11 } } } },
                     scales: {
                         x: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF' } },
                         y: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF' } }
@@ -891,7 +876,6 @@
                 }
             });
 
-            // Expense Categories Chart
             const categorySums = {};
             transactions.filter(t => t.type === 'EXPENSE').forEach(t => {
                 categorySums[t.category] = (categorySums[t.category] || 0) + t.amount;
@@ -899,6 +883,7 @@
 
             const catLabels = Object.keys(categorySums);
             const catValues = Object.values(categorySums);
+            const colors = catLabels.map(cat => categoryColors[cat] || '#00F5D4');
 
             const ctx2 = document.getElementById('categoryChart').getContext('2d');
             categoryChartInstance = new Chart(ctx2, {
@@ -907,9 +892,7 @@
                     labels: catLabels.length ? catLabels : ['Belum Ada Pengeluaran'],
                     datasets: [{
                         data: catValues.length ? catValues : [1],
-                        backgroundColor: catValues.length ? [
-                            '#00F5D4', '#00BBF9', '#7B2CBF', '#FF0054', '#F15BB5', '#FEE440', '#3A86FF'
-                        ] : ['#232D3F'],
+                        backgroundColor: catValues.length ? colors : ['#232D3F'],
                         borderWidth: 2,
                         borderColor: '#161C28'
                     }]
@@ -924,7 +907,44 @@
             });
         }
 
-        // EXPORT TO CSV
+        // EXPORT BACKUP JSON & CSV
+        function exportDataJSON() {
+            const dataObj = { user: currentUser, transactions, activityLogs };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `FinanceHub_Backup_${currentUser ? currentUser.name.replace(/\s+/g, '_') : 'User'}_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importDataJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.transactions && Array.isArray(imported.transactions)) {
+                        transactions = imported.transactions;
+                        if (imported.activityLogs) activityLogs = imported.activityLogs;
+                        localStorage.setItem('fh_transactions', JSON.stringify(transactions));
+                        localStorage.setItem('fh_logs', JSON.stringify(activityLogs));
+                        addActivityLog('IMPORT', 'Melakukan restore / import data dari file JSON.');
+                        renderAll();
+                        alert('Data berhasil dipulihkan!');
+                    } else {
+                        alert('Format file JSON tidak valid.');
+                    }
+                } catch(err) {
+                    alert('Gagal membaca file backup.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function exportToCSV() {
             if (transactions.length === 0) {
                 alert('Tidak ada data transaksi untuk di-export.');
