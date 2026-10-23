@@ -2,7 +2,7 @@
 <html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FinanceHub - Personal Finance Manager</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,51 +30,56 @@
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #0B0F17; }
         ::-webkit-scrollbar-thumb { background: #232D3F; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #00BBF9; }
+        /* Safe Area Padding for Mobile Bottom Bar */
+        .pb-safe { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
     </style>
 </head>
-<body class="bg-darkbg text-gray-100 min-h-screen flex flex-col antialiased">
+<body class="bg-darkbg text-gray-100 min-h-screen flex flex-col antialiased selection:bg-accentcyan selection:text-gray-900">
 
-    <!-- MODAL LOGIN / MASUK LOG -->
-    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md px-4">
-        <div class="bg-cardbg border border-cardborder rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl relative">
+    <!-- MODAL LOGIN / MASUK -->
+    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="bg-cardbg border border-cardborder rounded-2xl p-5 sm:p-8 w-full max-w-md shadow-2xl relative">
             <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accentcyan/10 text-accentcyan mb-3">
-                    <i class="fa-solid fa-wallet text-3xl"></i>
+                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-accentcyan/10 text-accentcyan mb-3">
+                    <i class="fa-solid fa-wallet text-2xl sm:text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-white">Selamat Datang</h2>
-                <p class="text-xs sm:text-sm text-gray-400 mt-1">Masukkan email & nama untuk mengakses akun keuangan Anda secara real-time dari perangkat apa saja.</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Selamat Datang</h2>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1">Masukkan nama & email untuk terhubung secara real-time antar perangkat HP & Laptop.</p>
             </div>
 
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Nama Lengkap</label>
+                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Nama Lengkap</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                            <i class="fa-solid fa-user"></i>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                            <i class="fa-solid fa-user text-sm"></i>
                         </span>
                         <input type="text" id="inputName" required placeholder="Contoh: Budi Santoso"
-                            class="w-full bg-darkbg/80 border border-cardborder rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentcyan focus:ring-1 focus:ring-accentcyan transition">
+                            class="w-full bg-darkbg/80 border border-cardborder rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentcyan focus:ring-1 focus:ring-accentcyan transition">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Alamat Email</label>
+                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Alamat Email</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                            <i class="fa-solid fa-envelope"></i>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                            <i class="fa-solid fa-envelope text-sm"></i>
                         </span>
                         <input type="email" id="inputEmail" required placeholder="nama@email.com"
-                            class="w-full bg-darkbg/80 border border-cardborder rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentcyan focus:ring-1 focus:ring-accentcyan transition">
+                            class="w-full bg-darkbg/80 border border-cardborder rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentcyan focus:ring-1 focus:ring-accentcyan transition">
                     </div>
                 </div>
 
-                <button type="submit" id="btnLoginSubmit"
-                    class="w-full mt-2 bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3 px-4 rounded-xl hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-accentcyan/20 flex items-center justify-center gap-2">
+                <button type="submit"
+                    class="w-full mt-2 bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3.5 px-4 rounded-xl hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-accentcyan/20 flex items-center justify-center gap-2 text-sm">
                     <span>Masuk ke Aplikasi</span> <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
@@ -84,11 +89,11 @@
     <!-- MAIN APP STRUCTURE -->
     <div id="appContainer" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
 
-        <!-- SIDEBAR -->
-        <aside class="w-full md:w-64 bg-cardbg border-r border-cardborder p-4 flex flex-col justify-between shrink-0">
+        <!-- DESKTOP SIDEBAR -->
+        <aside class="hidden md:flex w-64 bg-cardbg border-r border-cardborder p-5 flex-col justify-between shrink-0 h-screen sticky top-0">
             <div>
-                <!-- LOGO / BRAND -->
-                <div class="flex items-center gap-3 px-2 py-3 mb-6">
+                <!-- BRAND HEADER -->
+                <div class="flex items-center gap-3 py-2 mb-6">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accentcyan to-accentblue flex items-center justify-center text-gray-900 font-black text-xl shadow-md">
                         <i class="fa-solid fa-chart-pie"></i>
                     </div>
@@ -102,156 +107,174 @@
 
                 <!-- USER PROFILE BADGE -->
                 <div class="bg-darkbg/60 border border-cardborder rounded-xl p-3 mb-6 flex items-center gap-3">
-                    <div id="userAvatar" class="w-10 h-10 rounded-full bg-accentpurple flex items-center justify-center font-bold text-white text-sm shrink-0">
+                    <div id="userAvatar" class="w-9 h-9 rounded-full bg-accentpurple flex items-center justify-center font-bold text-white text-xs shrink-0">
                         --
                     </div>
                     <div class="overflow-hidden">
-                        <h3 id="userNameDisplay" class="text-sm font-semibold text-white truncate">--</h3>
-                        <p id="userEmailDisplay" class="text-xs text-gray-400 truncate">--</p>
+                        <h3 id="userNameDisplay" class="text-xs font-bold text-white truncate">--</h3>
+                        <p id="userEmailDisplay" class="text-[10px] text-gray-400 truncate">--</p>
                     </div>
                 </div>
 
-                <!-- NAVIGATION -->
-                <nav class="space-y-1">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20">
-                        <i class="fa-solid fa-house w-5 text-center"></i> Dashboard
+                <!-- DESKTOP NAVIGATION -->
+                <nav class="space-y-1.5">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20">
+                        <i class="fa-solid fa-house w-4 text-center text-sm"></i> Dashboard
                     </button>
-                    <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-gray-400 hover:text-white hover:bg-cardborder/40">
-                        <i class="fa-solid fa-list-check w-5 text-center"></i> Transaksi
+                    <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs transition text-gray-400 hover:text-white hover:bg-cardborder/40">
+                        <i class="fa-solid fa-list-check w-4 text-center text-sm"></i> Transaksi
                     </button>
-                    <button onclick="switchTab('activity')" id="nav-activity" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-gray-400 hover:text-white hover:bg-cardborder/40">
-                        <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Activity Log
+                    <button onclick="switchTab('activity')" id="nav-activity" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs transition text-gray-400 hover:text-white hover:bg-cardborder/40">
+                        <i class="fa-solid fa-clock-rotate-left w-4 text-center text-sm"></i> Activity Log
                     </button>
                 </nav>
             </div>
 
             <!-- ACTION BUTTONS -->
-            <div class="mt-6 space-y-2">
-                <button onclick="openModal('transaction')" class="w-full bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition active:scale-95 shadow-md shadow-accentcyan/10 text-sm">
+            <div class="space-y-2 pt-4 border-t border-cardborder">
+                <button onclick="openModal('transaction')" class="w-full bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition active:scale-95 shadow-md text-xs">
                     <i class="fa-solid fa-plus"></i> Tambah Transaksi
                 </button>
-                <button onclick="handleLogout()" class="w-full border border-red-500/30 text-red-400 hover:bg-red-500/10 font-medium py-2 px-4 rounded-xl flex items-center justify-center gap-2 transition text-xs">
-                    <i class="fa-solid fa-right-from-bracket"></i> Keluar / Ganti Akun
+                <button onclick="handleLogout()" class="w-full border border-red-500/30 text-red-400 hover:bg-red-500/10 font-semibold py-2 px-4 rounded-xl flex items-center justify-center gap-2 transition text-[11px]">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar Akun
                 </button>
             </div>
         </aside>
 
+        <!-- MOBILE TOP BAR -->
+        <header class="md:hidden bg-cardbg border-b border-cardborder px-4 py-3 sticky top-0 z-30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-accentcyan to-accentblue flex items-center justify-center text-gray-900 font-black text-sm">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm text-white">FinanceHub</h1>
+                    <span class="text-[9px] text-accentcyan font-bold tracking-widest uppercase block -mt-0.5">Cloud Sync</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openModal('transaction')" class="bg-accentcyan text-gray-900 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 active:scale-95 transition">
+                    <i class="fa-solid fa-plus"></i> Catat
+                </button>
+                <button onclick="handleLogout()" class="text-gray-400 hover:text-rose-400 p-1.5 rounded-lg text-sm">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
         <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        <main class="flex-1 p-3 sm:p-6 md:p-8 overflow-y-auto w-full pb-safe">
 
             <!-- DASHBOARD TAB -->
-            <section id="tab-dashboard" class="space-y-6">
+            <section id="tab-dashboard" class="space-y-4 sm:space-y-6">
+                
                 <!-- TOP SUMMARY CARDS -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     <!-- Total Balance -->
-                    <div class="bg-cardbg border border-cardborder rounded-2xl p-5 relative overflow-hidden shadow-lg">
-                        <div class="absolute -right-4 -bottom-4 text-accentcyan/5 text-7xl"><i class="fa-solid fa-wallet"></i></div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Saldo Bersih</span>
-                        <h2 id="totalBalance" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Rp 0</h2>
-                        <span class="text-[11px] text-gray-400 mt-2 block flex items-center gap-1">
-                            <i class="fa-solid fa-shield-halved text-accentcyan"></i> Akumulasi Seluruh Akun
+                    <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-lg">
+                        <div class="absolute -right-3 -bottom-3 text-accentcyan/5 text-6xl sm:text-7xl"><i class="fa-solid fa-wallet"></i></div>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-400">Total Saldo Bersih</span>
+                        <h2 id="totalBalance" class="text-xl sm:text-3xl font-extrabold text-white mt-1">Rp 0</h2>
+                        <span class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 block flex items-center gap-1">
+                            <i class="fa-solid fa-shield-halved text-accentcyan"></i> Akumulasi Seluruh Dompet
                         </span>
                     </div>
 
                     <!-- Income -->
-                    <div class="bg-cardbg border border-cardborder rounded-2xl p-5 relative overflow-hidden shadow-lg">
-                        <div class="absolute -right-4 -bottom-4 text-emerald-500/5 text-7xl"><i class="fa-solid fa-circle-arrow-down"></i></div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Pemasukan (Bulan Ini)</span>
-                        <h2 id="monthlyIncome" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1">Rp 0</h2>
-                        <span class="text-[11px] text-gray-400 mt-2 block flex items-center gap-1">
+                    <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-lg">
+                        <div class="absolute -right-3 -bottom-3 text-emerald-500/5 text-6xl sm:text-7xl"><i class="fa-solid fa-circle-arrow-down"></i></div>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-400">Pemasukan (Bulan Ini)</span>
+                        <h2 id="monthlyIncome" class="text-xl sm:text-3xl font-extrabold text-emerald-400 mt-1">Rp 0</h2>
+                        <span class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 block flex items-center gap-1">
                             <i class="fa-solid fa-arrow-down text-emerald-400"></i> Total uang masuk
                         </span>
                     </div>
 
                     <!-- Expense -->
-                    <div class="bg-cardbg border border-cardborder rounded-2xl p-5 relative overflow-hidden shadow-lg">
-                        <div class="absolute -right-4 -bottom-4 text-rose-500/5 text-7xl"><i class="fa-solid fa-circle-arrow-up"></i></div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Pengeluaran (Bulan Ini)</span>
-                        <h2 id="monthlyExpense" class="text-2xl sm:text-3xl font-extrabold text-rose-400 mt-1">Rp 0</h2>
-                        <span class="text-[11px] text-gray-400 mt-2 block flex items-center gap-1">
+                    <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-lg">
+                        <div class="absolute -right-3 -bottom-3 text-rose-500/5 text-6xl sm:text-7xl"><i class="fa-solid fa-circle-arrow-up"></i></div>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-rose-400">Pengeluaran (Bulan Ini)</span>
+                        <h2 id="monthlyExpense" class="text-xl sm:text-3xl font-extrabold text-rose-400 mt-1">Rp 0</h2>
+                        <span class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 block flex items-center gap-1">
                             <i class="fa-solid fa-arrow-up text-rose-400"></i> Total uang keluar
                         </span>
                     </div>
                 </div>
 
-                <!-- WALLET / ACCOUNT BREAKDOWN -->
+                <!-- WALLET BREAKDOWN -->
                 <div>
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-vault text-accentcyan"></i> Rincian Saldo Akun / Dompet
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-vault text-accentcyan"></i> Rincian Dompet / Akun
                     </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-4 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4">
+                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-3.5 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
-                            <div>
-                                <span class="text-xs text-gray-400 block font-medium">Cash / Tunai</span>
-                                <span id="balanceCash" class="text-lg font-bold text-white">Rp 0</span>
+                            <div class="overflow-hidden">
+                                <span class="text-[11px] text-gray-400 block font-medium">Cash / Tunai</span>
+                                <span id="balanceCash" class="text-base font-bold text-white truncate block">Rp 0</span>
                             </div>
                         </div>
 
-                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-4 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-accentblue/10 text-accentblue flex items-center justify-center text-xl shrink-0">
+                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-3.5 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accentblue/10 text-accentblue flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-mobile-screen-button"></i>
                             </div>
-                            <div>
-                                <span class="text-xs text-gray-400 block font-medium">E-Wallet</span>
-                                <span id="balanceEWallet" class="text-lg font-bold text-white">Rp 0</span>
+                            <div class="overflow-hidden">
+                                <span class="text-[11px] text-gray-400 block font-medium">E-Wallet</span>
+                                <span id="balanceEWallet" class="text-base font-bold text-white truncate block">Rp 0</span>
                             </div>
                         </div>
 
-                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-4 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-accentpurple/10 text-accentpurple flex items-center justify-center text-xl shrink-0">
+                        <div class="bg-cardbg/80 border border-cardborder rounded-xl p-3.5 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accentpurple/10 text-accentpurple flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-building-columns"></i>
                             </div>
-                            <div>
-                                <span class="text-xs text-gray-400 block font-medium">Bank Transfer</span>
-                                <span id="balanceBank" class="text-lg font-bold text-white">Rp 0</span>
+                            <div class="overflow-hidden">
+                                <span class="text-[11px] text-gray-400 block font-medium">Bank Transfer</span>
+                                <span id="balanceBank" class="text-base font-bold text-white truncate block">Rp 0</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- CHARTS ROW -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-cardbg border border-cardborder rounded-2xl p-5 shadow-lg">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-white">Arus Kas Bulanan</h3>
-                                <p class="text-xs text-gray-400">Perbandingan Pemasukan vs Pengeluaran</p>
-                            </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <div class="lg:col-span-2 bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 shadow-lg">
+                        <div class="mb-3">
+                            <h3 class="text-sm sm:text-base font-bold text-white">Arus Kas Bulanan</h3>
+                            <p class="text-[11px] text-gray-400">Pemasukan vs Pengeluaran (6 Bulan Terakhir)</p>
                         </div>
-                        <div class="h-64 relative">
+                        <div class="h-56 sm:h-64 relative">
                             <canvas id="cashflowChart"></canvas>
                         </div>
                     </div>
 
-                    <div class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-lg">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-white">Kategori Pengeluaran</h3>
-                                <p class="text-xs text-gray-400">Proporsi alokasi pengeluaran Anda</p>
-                            </div>
+                    <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 shadow-lg">
+                        <div class="mb-3">
+                            <h3 class="text-sm sm:text-base font-bold text-white">Kategori Pengeluaran</h3>
+                            <p class="text-[11px] text-gray-400">Proporsi alokasi dana keluar</p>
                         </div>
-                        <div class="h-64 relative flex items-center justify-center">
+                        <div class="h-56 sm:h-64 relative flex items-center justify-center">
                             <canvas id="categoryChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- RECENT TRANSACTIONS TABLE preview -->
-                <div class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <!-- RECENT TRANSACTIONS PREVIEW -->
+                <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 shadow-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-clock text-accentcyan"></i> Transaksi Terakhir
                         </h3>
                         <button onclick="switchTab('transactions')" class="text-xs font-semibold text-accentcyan hover:underline">
-                            Lihat Semua <i class="fa-solid fa-chevron-right ml-1"></i>
+                            Semua <i class="fa-solid fa-chevron-right ml-0.5"></i>
                         </button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <tbody id="recentTransactionsList" class="divide-y divide-cardborder">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <tbody id="recentTransactionsList" class="divide-y divide-cardborder/60">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>
@@ -260,49 +283,49 @@
             </section>
 
             <!-- TRANSACTIONS TAB -->
-            <section id="tab-transactions" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <section id="tab-transactions" class="space-y-4 sm:space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                        <h2 class="text-xl font-bold text-white">Riwayat Transaksi</h2>
-                        <p class="text-xs text-gray-400">Kelola dan atur data pemasukan serta pengeluaran Anda.</p>
+                        <h2 class="text-lg sm:text-xl font-bold text-white">Riwayat Transaksi</h2>
+                        <p class="text-xs text-gray-400">Kelola dan filter data catatan keuangan Anda.</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="exportToCSV()" class="bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-2">
+                        <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-cardbg border border-cardborder hover:bg-cardborder text-gray-200 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-file-csv text-emerald-400 text-sm"></i> Export CSV
                         </button>
-                        <button onclick="openModal('transaction')" class="bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-2">
-                            <i class="fa-solid fa-plus"></i> Tambah Baru
+                        <button onclick="openModal('transaction')" class="flex-1 sm:flex-none bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold text-xs px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Tambah
                         </button>
                     </div>
                 </div>
 
                 <!-- FILTERS -->
-                <div class="bg-cardbg border border-cardborder rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-4 gap-3">
-                    <div>
+                <div class="bg-cardbg border border-cardborder rounded-2xl p-3.5 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div class="col-span-2 sm:col-span-1">
                         <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Cari</label>
-                        <input type="text" id="filterSearch" oninput="renderTransactions()" placeholder="Cari deskripsi..."
-                            class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-accentcyan">
+                        <input type="text" id="filterSearch" oninput="renderTransactions()" placeholder="Cari..."
+                            class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentcyan">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Tipe</label>
-                        <select id="filterType" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-accentcyan">
-                            <option value="ALL">Semua Tipe</option>
-                            <option value="INCOME">Pemasukan (Income)</option>
-                            <option value="EXPENSE">Pengeluaran (Expense)</option>
+                        <select id="filterType" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-accentcyan">
+                            <option value="ALL">Semua</option>
+                            <option value="INCOME">Pemasukan</option>
+                            <option value="EXPENSE">Pengeluaran</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Akun / Metoda</label>
-                        <select id="filterAccount" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-accentcyan">
-                            <option value="ALL">Semua Akun</option>
-                            <option value="CASH">Cash / Tunai</option>
+                        <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Dompet</label>
+                        <select id="filterAccount" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-accentcyan">
+                            <option value="ALL">Semua</option>
+                            <option value="CASH">Cash</option>
                             <option value="E-WALLET">E-Wallet</option>
-                            <option value="BANK">Bank Transfer</option>
+                            <option value="BANK">Bank</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Urutkan</label>
-                        <select id="filterSort" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-accentcyan">
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-[10px] font-bold uppercase text-gray-400 mb-1">Urutan</label>
+                        <select id="filterSort" onchange="renderTransactions()" class="w-full bg-darkbg border border-cardborder rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-accentcyan">
                             <option value="DESC">Terbaru Dahulu</option>
                             <option value="ASC">Terlama Dahulu</option>
                             <option value="AMOUNT_DESC">Nominal Terbesar</option>
@@ -310,21 +333,21 @@
                     </div>
                 </div>
 
-                <!-- TABLE TRANSACTIONS -->
+                <!-- TRANSACTIONS TABLE -->
                 <div class="bg-cardbg border border-cardborder rounded-2xl shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-darkbg/50 text-gray-400 text-xs uppercase font-semibold border-b border-cardborder">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-darkbg/60 text-gray-400 text-[11px] uppercase font-semibold border-b border-cardborder">
                                 <tr>
-                                    <th class="py-3 px-4">Tanggal</th>
-                                    <th class="py-3 px-4">Deskripsi / Judul</th>
-                                    <th class="py-3 px-4">Kategori</th>
-                                    <th class="py-3 px-4">Akun</th>
-                                    <th class="py-3 px-4 text-right">Jumlah</th>
-                                    <th class="py-3 px-4 text-center">Aksi</th>
+                                    <th class="py-3 px-3 sm:px-4">Tanggal</th>
+                                    <th class="py-3 px-3 sm:px-4">Deskripsi</th>
+                                    <th class="py-3 px-3 sm:px-4">Kategori</th>
+                                    <th class="py-3 px-3 sm:px-4">Dompet</th>
+                                    <th class="py-3 px-3 sm:px-4 text-right">Jumlah</th>
+                                    <th class="py-3 px-3 sm:px-4 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="fullTransactionsList" class="divide-y divide-cardborder text-gray-300">
+                            <tbody id="fullTransactionsList" class="divide-y divide-cardborder/50 text-gray-300">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>
@@ -333,78 +356,99 @@
             </section>
 
             <!-- ACTIVITY LOG TAB -->
-            <section id="tab-activity" class="space-y-6 hidden">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-white">Log Aktivitas Pengguna</h2>
-                        <p class="text-xs text-gray-400">Catatan riwayat masuk/login dan setiap perubahan data yang dilakukan di web.</p>
-                    </div>
+            <section id="tab-activity" class="space-y-4 sm:space-y-6 hidden">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-white">Log Aktivitas Pengguna</h2>
+                    <p class="text-xs text-gray-400">Catatan riwayat masuk dan perubahan data real-time.</p>
                 </div>
 
-                <div class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-lg">
-                    <ol id="activityLogList" class="relative border-l border-cardborder ml-3 space-y-6">
+                <div class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-5 shadow-lg">
+                    <ol id="activityLogList" class="relative border-l border-cardborder ml-2.5 sm:ml-3 space-y-5">
                         <!-- Populated dynamically -->
                     </ol>
                 </div>
             </section>
 
         </main>
+
+        <!-- MOBILE BOTTOM NAVIGATION BAR -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-cardbg/95 backdrop-blur-lg border-t border-cardborder z-40 px-3 py-2 flex justify-around items-center">
+            <button onclick="switchTab('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center gap-1 text-accentcyan transition px-3 py-1">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[10px] font-bold">Home</span>
+            </button>
+            <button onclick="switchTab('transactions')" id="mob-nav-transactions" class="flex flex-col items-center gap-1 text-gray-400 transition px-3 py-1">
+                <i class="fa-solid fa-list-check text-base"></i>
+                <span class="text-[10px] font-bold">Transaksi</span>
+            </button>
+            <button onclick="openModal('transaction')" class="flex flex-col items-center justify-center -mt-5 bg-gradient-to-tr from-accentcyan to-accentblue text-gray-900 rounded-full w-12 h-12 shadow-lg shadow-accentcyan/20 active:scale-90 transition">
+                <i class="fa-solid fa-plus text-lg font-bold"></i>
+            </button>
+            <button onclick="switchTab('activity')" id="mob-nav-activity" class="flex flex-col items-center gap-1 text-gray-400 transition px-3 py-1">
+                <i class="fa-solid fa-clock-rotate-left text-base"></i>
+                <span class="text-[10px] font-bold">Aktivitas</span>
+            </button>
+            <button onclick="handleLogout()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-rose-400 transition px-3 py-1">
+                <i class="fa-solid fa-right-from-bracket text-base"></i>
+                <span class="text-[10px] font-bold">Keluar</span>
+            </button>
+        </nav>
     </div>
 
     <!-- MODAL TAMBAH / EDIT TRANSAKSI -->
-    <div id="transactionModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden px-4">
-        <div class="bg-cardbg border border-cardborder rounded-2xl p-6 w-full max-w-lg shadow-2xl relative">
-            <div class="flex justify-between items-center mb-5">
-                <h3 id="modalTitle" class="text-lg font-bold text-white">Tambah Transaksi Baru</h3>
-                <button onclick="closeModal('transaction')" class="text-gray-400 hover:text-white transition">
+    <div id="transactionModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+        <div class="bg-cardbg border border-cardborder rounded-2xl p-5 sm:p-6 w-full max-w-lg shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-base sm:text-lg font-bold text-white">Tambah Transaksi Baru</h3>
+                <button onclick="closeModal('transaction')" class="text-gray-400 hover:text-white p-1 transition">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
 
-            <form id="transactionForm" class="space-y-4">
+            <form id="transactionForm" class="space-y-3.5">
                 <input type="hidden" id="editTxId">
 
                 <!-- TYPE SWITCH -->
                 <div class="grid grid-cols-2 gap-2 p-1 bg-darkbg rounded-xl border border-cardborder">
                     <button type="button" id="btnTypeIncome" onclick="setTxType('INCOME')"
-                        class="py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10">
-                        <i class="fa-solid fa-arrow-down"></i> Pemasukan (Income)
+                        class="py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10">
+                        <i class="fa-solid fa-arrow-down"></i> Pemasukan
                     </button>
                     <button type="button" id="btnTypeExpense" onclick="setTxType('EXPENSE')"
-                        class="py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400">
-                        <i class="fa-solid fa-arrow-up"></i> Pengeluaran (Expense)
+                        class="py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-gray-400">
+                        <i class="fa-solid fa-arrow-up"></i> Pengeluaran
                     </button>
                 </div>
                 <input type="hidden" id="txType" value="INCOME">
 
                 <!-- AMOUNT -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Nominal (Rp)</label>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Nominal (Rp)</label>
                     <input type="number" id="txAmount" required min="1" placeholder="0"
-                        class="w-full bg-darkbg border border-cardborder rounded-xl px-4 py-2.5 text-white font-bold text-lg focus:outline-none focus:border-accentcyan">
+                        class="w-full bg-darkbg border border-cardborder rounded-xl px-4 py-3 text-white font-extrabold text-lg focus:outline-none focus:border-accentcyan">
                 </div>
 
                 <!-- DESCRIPTION -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Deskripsi / Catatan</label>
-                    <input type="text" id="txDesc" required placeholder="Contoh: Gaji Bulanan, Beli Bensin, dll"
-                        class="w-full bg-darkbg border border-cardborder rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Deskripsi / Catatan</label>
+                    <input type="text" id="txDesc" required placeholder="Contoh: Gaji Bulanan, Beli Bensin"
+                        class="w-full bg-darkbg border border-cardborder rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-accentcyan">
                 </div>
 
                 <!-- ACCOUNT & CATEGORY GRID -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Akun / Wallet</label>
-                        <select id="txAccount" required class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Dompet / Akun</label>
+                        <select id="txAccount" required class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-accentcyan">
                             <option value="CASH">Cash / Tunai</option>
-                            <option value="E-WALLET">E-Wallet (OVO, GoPay, Dana, dll)</option>
+                            <option value="E-WALLET">E-Wallet (OVO, GoPay, Dana)</option>
                             <option value="BANK">Bank Transfer / Rekening</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Kategori</label>
-                        <select id="txCategory" required class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Kategori</label>
+                        <select id="txCategory" required class="w-full bg-darkbg border border-cardborder rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-accentcyan">
                             <!-- Populated dynamically -->
                         </select>
                     </div>
@@ -412,15 +456,15 @@
 
                 <!-- DATE -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Tanggal Transaksi</label>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Tanggal Transaksi</label>
                     <input type="date" id="txDate" required
-                        class="w-full bg-darkbg border border-cardborder rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                        class="w-full bg-darkbg border border-cardborder rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-accentcyan">
                 </div>
 
                 <!-- SUBMIT BUTTON -->
                 <div class="pt-2">
                     <button type="submit"
-                        class="w-full bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3 rounded-xl hover:opacity-90 transition active:scale-95 shadow-md shadow-accentcyan/10 text-sm">
+                        class="w-full bg-gradient-to-r from-accentcyan to-accentblue text-gray-900 font-bold py-3.5 rounded-xl hover:opacity-90 transition active:scale-95 shadow-md shadow-accentcyan/10 text-xs sm:text-sm">
                         Simpan Transaksi
                     </button>
                 </div>
@@ -428,12 +472,12 @@
         </div>
     </div>
 
-    <!-- FIREBASE SDKs & LOGIC MODULE -->
+    <!-- FIREBASE MODULE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CONFIGURATION TERPASANG DARI FIREBASE ANDA
+        // FIREBASE CONFIGURATION
         const firebaseConfig = {
           apiKey: "AIzaSyBLYvOdvslb44Lixe1GLhPaXy34qvzdRgg",
           authDomain: "finance-manager-d56d8.firebaseapp.com",
@@ -444,18 +488,15 @@
           measurementId: "G-PKN0T3TZBQ"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // GLOBAL STATE
         window.currentUser = null;
         window.transactions = [];
         window.activityLogs = [];
         let unsubscribeTx = null;
         let unsubscribeLogs = null;
 
-        // CHARTS INSTANCES
         let cashflowChartInstance = null;
         let categoryChartInstance = null;
 
@@ -475,7 +516,6 @@
             EXPENSE: ['Makanan & Minuman', 'Belanja', 'Transportasi', 'Tagihan & Utilitas', 'Hiburan', 'Kesehatan', 'Pendidikan', 'Lain-Lain']
         };
 
-        // DOM LOADED
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('fh_cloud_user');
             if (savedUser) {
@@ -489,7 +529,6 @@
             document.getElementById('txDate').valueAsDate = new Date();
         });
 
-        // LOGIN SUBMIT
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('inputName').value.trim();
@@ -501,15 +540,13 @@
             localStorage.setItem('fh_cloud_user', JSON.stringify(window.currentUser));
 
             await initCloudSession();
-            await addActivityLog('LOGIN', `Pengguna masuk/login di perangkat ini.`);
+            await addActivityLog('LOGIN', `Pengguna masuk di perangkat ini.`);
         });
 
         async function initCloudSession() {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
             updateUserUI();
-
-            // Setup Realtime Listeners for Firestore
             setupFirestoreListeners();
         }
 
@@ -517,7 +554,6 @@
             if (!window.currentUser) return;
             const uid = window.currentUser.uid;
 
-            // Listen to Transactions Collection Realtime
             if (unsubscribeTx) unsubscribeTx();
             const txQuery = query(collection(db, "users", uid, "transactions"));
             unsubscribeTx = onSnapshot(txQuery, (snapshot) => {
@@ -528,7 +564,6 @@
                 renderAll();
             });
 
-            // Listen to Logs Collection Realtime
             if (unsubscribeLogs) unsubscribeLogs();
             const logQuery = query(collection(db, "users", uid, "logs"));
             unsubscribeLogs = onSnapshot(logQuery, (snapshot) => {
@@ -561,7 +596,6 @@
             document.getElementById('userAvatar').innerText = initials || 'U';
         }
 
-        // LOGGING SYSTEM
         async function addActivityLog(type, details) {
             if (!window.currentUser) return;
             const logData = {
@@ -575,7 +609,6 @@
             } catch(e) { console.error("Log error:", e); }
         }
 
-        // SAVE TRANSACTION
         document.getElementById('transactionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!window.currentUser) return;
@@ -605,7 +638,6 @@
             closeModal('transaction');
         });
 
-        // DELETE TRANSACTION
         window.deleteTransaction = async (id) => {
             const tx = window.transactions.find(t => t.id === id);
             if (!tx) return;
@@ -620,7 +652,6 @@
             }
         };
 
-        // RENDER FUNCTIONS
         function renderAll() {
             calculateBalances();
             renderRecentTransactions();
@@ -663,7 +694,7 @@
             const recent = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
             if (recent.length === 0) {
-                container.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500 text-xs">Belum ada transaksi. Klik "+ Tambah Transaksi" untuk memulai.</td></tr>`;
+                container.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-gray-500 text-xs">Belum ada transaksi. Klik "+ Tambah" untuk memulai.</td></tr>`;
                 return;
             }
 
@@ -671,19 +702,19 @@
                 const isInc = t.type === 'INCOME';
                 return `
                     <tr class="hover:bg-cardborder/20 transition">
-                        <td class="py-3 px-2">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg ${isInc ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center text-xs shrink-0">
+                        <td class="py-2.5 px-1 sm:px-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg ${isInc ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center text-xs shrink-0">
                                     <i class="fa-solid ${isInc ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 </div>
-                                <div>
-                                    <div class="font-semibold text-white text-xs sm:text-sm">${t.description}</div>
-                                    <div class="text-[10px] text-gray-400">${t.category} • <span class="uppercase">${t.account}</span></div>
+                                <div class="overflow-hidden">
+                                    <div class="font-bold text-white text-xs truncate">${t.description}</div>
+                                    <div class="text-[10px] text-gray-400 truncate">${t.category} • <span class="uppercase">${t.account}</span></div>
                                 </div>
                             </div>
                         </td>
-                        <td class="py-3 px-2 text-right text-xs text-gray-400">${formatDate(t.date)}</td>
-                        <td class="py-3 px-2 text-right font-bold text-xs sm:text-sm ${isInc ? 'text-emerald-400' : 'text-rose-400'}">
+                        <td class="py-2.5 px-1 sm:px-2 text-right text-[11px] text-gray-400 whitespace-nowrap">${formatDate(t.date)}</td>
+                        <td class="py-2.5 px-1 sm:px-2 text-right font-bold text-xs sm:text-sm ${isInc ? 'text-emerald-400' : 'text-rose-400'} whitespace-nowrap">
                             ${isInc ? '+' : '-'} ${formatIDR(t.amount)}
                         </td>
                     </tr>
@@ -720,18 +751,18 @@
             container.innerHTML = filtered.map(t => {
                 const isInc = t.type === 'INCOME';
                 return `
-                    <tr class="hover:bg-cardborder/30 transition border-b border-cardborder/50">
-                        <td class="py-3 px-4 text-xs text-gray-400">${formatDate(t.date)}</td>
-                        <td class="py-3 px-4 font-semibold text-white text-sm">${t.description}</td>
-                        <td class="py-3 px-4 text-xs text-gray-300">
-                            <span class="bg-cardborder/60 px-2.5 py-1 rounded-md border border-cardborder/80">${t.category}</span>
+                    <tr class="hover:bg-cardborder/30 transition border-b border-cardborder/40">
+                        <td class="py-2.5 px-3 sm:px-4 text-[11px] text-gray-400 whitespace-nowrap">${formatDate(t.date)}</td>
+                        <td class="py-2.5 px-3 sm:px-4 font-semibold text-white text-xs sm:text-sm">${t.description}</td>
+                        <td class="py-2.5 px-3 sm:px-4 text-[11px] text-gray-300">
+                            <span class="bg-cardborder/60 px-2 py-0.5 rounded border border-cardborder/80 whitespace-nowrap">${t.category}</span>
                         </td>
-                        <td class="py-3 px-4 text-xs font-mono uppercase text-gray-400">${t.account}</td>
-                        <td class="py-3 px-4 text-right font-bold text-sm ${isInc ? 'text-emerald-400' : 'text-rose-400'}">
+                        <td class="py-2.5 px-3 sm:px-4 text-[11px] font-mono uppercase text-gray-400 whitespace-nowrap">${t.account}</td>
+                        <td class="py-2.5 px-3 sm:px-4 text-right font-bold text-xs sm:text-sm ${isInc ? 'text-emerald-400' : 'text-rose-400'} whitespace-nowrap">
                             ${isInc ? '+' : '-'} ${formatIDR(t.amount)}
                         </td>
-                        <td class="py-3 px-4 text-center">
-                            <div class="flex items-center justify-center gap-2">
+                        <td class="py-2.5 px-3 sm:px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
                                 <button onclick="openModal('transaction', '${t.id}')" class="text-gray-400 hover:text-accentcyan text-xs p-1">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
@@ -759,22 +790,21 @@
                 if (log.type === 'EDIT') badgeColor = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
 
                 return `
-                    <li class="mb-6 ml-6">
-                        <span class="absolute flex items-center justify-center w-6 h-6 rounded-full -left-3 ring-4 ring-cardbg bg-cardborder text-gray-400 text-[10px]">
+                    <li class="mb-4 ml-5">
+                        <span class="absolute flex items-center justify-center w-5 h-5 rounded-full -left-2.5 ring-4 ring-cardbg bg-cardborder text-gray-400 text-[9px]">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                         </span>
-                        <div class="flex items-center gap-2 mb-1">
+                        <div class="flex flex-wrap items-center gap-1.5 mb-1">
                             <span class="text-xs font-bold text-white">${log.user}</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded border ${badgeColor}">${log.type}</span>
+                            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${badgeColor}">${log.type}</span>
                             <span class="text-[10px] text-gray-500 ml-auto">${formatDateTime(log.timestamp)}</span>
                         </div>
-                        <p class="text-xs text-gray-300 bg-darkbg/50 p-2.5 rounded-xl border border-cardborder/50">${log.details}</p>
+                        <p class="text-xs text-gray-300 bg-darkbg/60 p-2.5 rounded-xl border border-cardborder/50">${log.details}</p>
                     </li>
                 `;
             }).join('');
         }
 
-        // CHARTS RENDER
         function renderCharts() {
             if (document.getElementById('tab-dashboard').classList.contains('hidden')) return;
 
@@ -789,7 +819,7 @@
                 const d = new Date();
                 d.setMonth(d.getMonth() - i);
                 const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-                const monthLabel = d.toLocaleString('id-ID', { month: 'short', year: '2-digit' });
+                const monthLabel = d.toLocaleString('id-ID', { month: 'short' });
                 
                 months.push(monthLabel);
 
@@ -811,17 +841,17 @@
                 data: {
                     labels: months,
                     datasets: [
-                        { label: 'Pemasukan', data: incData, backgroundColor: '#00F5D4', borderRadius: 6 },
-                        { label: 'Pengeluaran', data: expData, backgroundColor: '#FF0054', borderRadius: 6 }
+                        { label: 'Pemasukan', data: incData, backgroundColor: '#00F5D4', borderRadius: 4 },
+                        { label: 'Pengeluaran', data: expData, backgroundColor: '#FF0054', borderRadius: 4 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#9CA3AF', font: { family: 'Inter', size: 11 } } } },
+                    plugins: { legend: { labels: { color: '#9CA3AF', font: { family: 'Inter', size: 10 } } } },
                     scales: {
-                        x: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF' } },
-                        y: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF' } }
+                        x: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF', font: { size: 10 } } },
+                        y: { grid: { color: '#232D3F' }, ticks: { color: '#9CA3AF', font: { size: 10 } } }
                     }
                 }
             });
@@ -839,7 +869,7 @@
             categoryChartInstance = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: catLabels.length ? catLabels : ['Belum Ada Pengeluaran'],
+                    labels: catLabels.length ? catLabels : ['Belum Ada Data'],
                     datasets: [{
                         data: catValues.length ? catValues : [1],
                         backgroundColor: catValues.length ? colors : ['#232D3F'],
@@ -851,23 +881,26 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { family: 'Inter', size: 10 } } }
+                        legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { family: 'Inter', size: 9 } } }
                     }
                 }
             });
         }
 
-        // GLOBAL HELPERS EXPOSED TO WINDOW
         window.switchTab = (tabName) => {
             ['dashboard', 'transactions', 'activity'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 const navBtn = document.getElementById(`nav-${t}`);
+                const mobNavBtn = document.getElementById(`mob-nav-${t}`);
+
                 if (t === tabName) {
                     el.classList.remove('hidden');
-                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20";
+                    if (navBtn) navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs transition text-accentcyan bg-accentcyan/10 border border-accentcyan/20";
+                    if (mobNavBtn) mobNavBtn.className = "flex flex-col items-center gap-1 text-accentcyan transition px-3 py-1";
                 } else {
                     el.classList.add('hidden');
-                    navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition text-gray-400 hover:text-white hover:bg-cardborder/40";
+                    if (navBtn) navBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs transition text-gray-400 hover:text-white hover:bg-cardborder/40";
+                    if (mobNavBtn) mobNavBtn.className = "flex flex-col items-center gap-1 text-gray-400 transition px-3 py-1";
                 }
             });
             if (tabName === 'dashboard') renderCharts();
@@ -912,11 +945,11 @@
             const selectCategory = document.getElementById('txCategory');
 
             if (type === 'INCOME') {
-                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10";
-                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
+                btnIncome.className = "py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-emerald-400 bg-emerald-500/10";
+                btnExpense.className = "py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-gray-400";
             } else {
-                btnExpense.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-rose-400 bg-rose-500/10";
-                btnIncome.className = "py-2 rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 text-gray-400";
+                btnExpense.className = "py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-rose-400 bg-rose-500/10";
+                btnIncome.className = "py-2.5 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 text-gray-400";
             }
 
             selectCategory.innerHTML = categories[type].map(c => `<option value="${c}">${c}</option>`).join('');
@@ -952,7 +985,7 @@
 
         function formatDate(dateStr) {
             if (!dateStr) return '-';
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const options = { year: '2-digit', month: 'short', day: 'numeric' };
             return new Date(dateStr).toLocaleDateString('id-ID', options);
         }
 
